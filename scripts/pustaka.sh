@@ -61,7 +61,7 @@ elif [ $retval -eq 1 ]; then
   echo Changes detected for $region!
   git add .
   git commit -m "Update pustaka for $region @$timestamp"
-  git push origin
+  git push origin-ssh
 elif [ $retval -eq -2147483648 ]; then
   echo "Error occured for $region, skipping..."
 fi
@@ -77,7 +77,7 @@ elif [ $retval -eq 1 ]; then
   echo Changes detected for $region!
   git add .
   git commit -m "Update pustaka for $region @$timestamp"
-  git push origin
+  git push origin-ssh
 elif [ $retval -eq -2147483648 ]; then
   echo "Error occured for $region, skipping..."
 fi
@@ -93,7 +93,7 @@ elif [ $retval -eq 1 ]; then
   echo Changes detected for $region!
   git add .
   git commit -m "Update pustaka for $region @$timestamp"
-  git push origin
+  git push origin-ssh
 elif [ $retval -eq -2147483648 ]; then
   echo "Error occured for $region, skipping..."
 fi
@@ -109,7 +109,7 @@ elif [ $retval -eq 1 ]; then
   echo Changes detected for $region!
   git add .
   git commit -m "Update pustaka for $region @$timestamp"
-  git push origin
+  git push origin-ssh
 elif [ $retval -eq -2147483648 ]; then
   echo "Error occured for $region, skipping..."
 fi
@@ -125,7 +125,7 @@ elif [ $retval -eq 1 ]; then
   echo Changes detected for $region!
   git add .
   git commit -m "Update pustaka for $region @$timestamp"
-  git push origin
+  git push origin-ssh
 elif [ $retval -eq -2147483648 ]; then
   echo "Error occured for $region, skipping..."
 fi
@@ -141,7 +141,7 @@ elif [ $retval -eq 1 ]; then
   echo Changes detected for $region!
   git add .
   git commit -m "Update pustaka for $region @$timestamp"
-  git push origin
+  git push origin-ssh
 elif [ $retval -eq -2147483648 ]; then
   echo "Error occured for $region, skipping..."
 fi
