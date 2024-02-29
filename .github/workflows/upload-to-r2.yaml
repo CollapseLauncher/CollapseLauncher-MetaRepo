@@ -1,0 +1,30 @@
+﻿name: Upload to R2
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  Fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        run: |
+          git clone --depth 1 https://github.com/neon-nyan/CollapseLauncher-MetaRepo.git cl-meta
+
+      - name: Clean unused objects
+        run: |
+          rm -rf ./cl-meta/.git
+          rm -rf ./cl-meta/.github
+          rm -rf ./cl-meta/.gitignore
+
+      - name: Sync Metadata root objects
+        uses: ryand56/r2-upload-action@latest
+        with:
+          r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
+          r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
+          r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          r2-bucket: ${{ secrets.R2_BUCKET }}
+          source-dir: cl-meta
+          destination-dir: cl-meta
+          output-file-url: false
