@@ -10,13 +10,14 @@ jobs:
     steps:
       - name: Checkout
         run: |
-          git clone --depth 1 https://github.com/neon-nyan/CollapseLauncher-MetaRepo.git cl-meta
+          git clone --depth 1 https://github.com/CollapseLauncher/CollapseLauncher-MetaRepo.git cl-meta
 
       - name: Clean unused objects
         run: |
           rm -rf ./cl-meta/.git
           rm -rf ./cl-meta/.github
           rm -rf ./cl-meta/.gitignore
+          rm -rf ./cl-meta/scripts
 
       - name: Sync Metadata root objects
         uses: ryand56/r2-upload-action@latest
