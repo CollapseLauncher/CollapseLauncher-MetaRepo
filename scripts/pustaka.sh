@@ -30,10 +30,10 @@ fi
 echo Doing cleanups and update for MetaRepo
 if git diff-index --quiet HEAD --; then
   git stash
-  git checkout main
 fi
 eval "$(ssh-agent -s)"
 git pull origin-ssh main --force
+git checkout main
 if [ $? -ne 0 ]; then
   echo Pull failed! Please help...
   exit
