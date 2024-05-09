@@ -30,6 +30,7 @@ fi
 echo Doing cleanups and update for MetaRepo
 if git diff-index --quiet HEAD --; then
   git stash
+  git checkout main
 fi
 eval "$(ssh-agent -s)"
 git pull origin-ssh main --force
