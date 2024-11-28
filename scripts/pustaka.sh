@@ -3,9 +3,11 @@
 echo Running pustaka updater script...
 program_dir="/mnt/share/collapseTool/Senadina/"
 program="$program_dir/senadina-er"
-json="$program_dir/metadata.json"
+json_old="$program_dir/metadata.json"
 
 repo_dir="/mnt/share/collapseTool/CollapseLauncher-MetaRepo"
+metadataV3_dir="/mnt/share/collapseTool/metadatav3"
+json="$metadataV3_dir"
 pustaka_dir="$repo_dir/pustaka/"
 metadata_url="https://github.com/CollapseLauncher/CollapseLauncher-ReleaseRepo/raw/main/metadata/metadatav2_previewconfig.json"
 
@@ -48,7 +50,14 @@ fi
 chmod +x "$program"
 
 # get newest metadata
-wget "$metadata_url" -O "$json"
+wget "https://github.com/CollapseLauncher/CollapseLauncher-ReleaseRepo/raw/refs/heads/main/metadata/v3/preview/config_master.json" -O "$metadataV3_dir/config_master.json"
+wget "https://github.com/CollapseLauncher/CollapseLauncher-ReleaseRepo/raw/refs/heads/main/metadata/v3/preview/config_Hi3SEA.json" -O "$metadataV3_dir/config_Hi3SEA.json"
+wget "https://github.com/CollapseLauncher/CollapseLauncher-ReleaseRepo/raw/refs/heads/main/metadata/v3/preview/config_Hi3CN.json" -O "$metadataV3_dir/config_Hi3CN.json"
+wget "https://github.com/CollapseLauncher/CollapseLauncher-ReleaseRepo/raw/refs/heads/main/metadata/v3/preview/config_Hi3Global.json" -O "$metadataV3_dir/config_Hi3Global.json"
+wget "https://github.com/CollapseLauncher/CollapseLauncher-ReleaseRepo/raw/refs/heads/main/metadata/v3/preview/config_Hi3JP.json" -O "$metadataV3_dir/config_Hi3JP.json"
+wget "https://github.com/CollapseLauncher/CollapseLauncher-ReleaseRepo/raw/refs/heads/main/metadata/v3/preview/config_Hi3KR.json" -O "$metadataV3_dir/config_Hi3KR.json"
+wget "https://github.com/CollapseLauncher/CollapseLauncher-ReleaseRepo/raw/refs/heads/main/metadata/v3/preview/config_Hi3TW.json" -O "$metadataV3_dir/config_Hi3TW.json"
+wget "https://github.com/CollapseLauncher/CollapseLauncher-ReleaseRepo/raw/refs/heads/main/metadata/v3/preview/stamp.json" -O "$metadataV3_dir/stamp.json"
 
 # do command
 echo
@@ -86,7 +95,7 @@ echo
 
 echo Updating CN...
 region=Hi3CN
-$program "$region" "$pustaka_dir" "$json"
+$program "$region" "$pustaka_dir" "$json" 7.9.1 "" 7.9.0
 retval=$?
 if [ $retval -eq 0 ]; then
   echo No changes on $region, skipping...
