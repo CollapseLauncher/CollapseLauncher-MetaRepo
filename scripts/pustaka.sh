@@ -1,162 +1,87 @@
 #!/bin/sh
 
-echo Running pustaka updater script...
-program_dir="/mnt/share/collapseTool/Senadina/"
+echo "Running pustaka updater script..."
+program_dir="/mnt/share/collapseTool/Senadina"
 program="$program_dir/senadina-er"
 json_old="$program_dir/metadata.json"
 
 repo_dir="/mnt/share/collapseTool/CollapseLauncher-MetaRepo"
 metadataV3_dir="/mnt/share/collapseTool/metadatav3"
 json="$metadataV3_dir"
-pustaka_dir="$repo_dir/pustaka/"
+pustaka_dir="$repo_dir/pustaka"
 metadata_url="https://github.com/CollapseLauncher/CollapseLauncher-ReleaseRepo/raw/main/metadata/metadatav2_previewconfig.json"
 
 timestamp=$(date +%s)
-echo Starting at "$timestamp"
-echo
+echo "Starting at $timestamp"
 echo
 
-if [ ! -d "$repo_dir" ]; then 
+# Ensure required directories exist
+if [ ! -d "$repo_dir" ]; then
   echo "Repo directory does not exist"
   exit 1
 fi
 
-cd "$repo_dir"
-
-# cleanup and pull
-if [ ! -d "$pustaka_dir" ]; then 
+if [ ! -d "$pustaka_dir" ]; then
   echo "Pustaka directory does not exist"
   exit 1
 fi
 
-echo Doing cleanups and update for MetaRepo
+# Pull latest changes from the repository
+echo "Doing cleanups and updating MetaRepo..."
+cd "$repo_dir" || exit 1
 if git diff-index --quiet HEAD --; then
   git stash
 fi
+
 eval "$(ssh-agent -s)"
 git pull origin-ssh main --force
-git checkout main
-if [ $? -ne 0 ]; then
-  echo Pull failed! Please help...
-  exit
-fi
+git checkout main || { echo "Pull failed! Please help..."; exit 1; }
 
-# Running updater program
-if [ ! -f "$program" ]; then 
+# Ensure program exists and is executable
+if [ ! -f "$program" ]; then
   echo "Program does not exist"
   exit 1
 fi
-
 chmod +x "$program"
 
-# get newest metadata
-wget "https://github.com/CollapseLauncher/CollapseLauncher-ReleaseRepo/raw/refs/heads/main/metadata/v3/preview/config_master.json" -O "$metadataV3_dir/config_master.json"
-wget "https://github.com/CollapseLauncher/CollapseLauncher-ReleaseRepo/raw/refs/heads/main/metadata/v3/preview/config_Hi3SEA.json" -O "$metadataV3_dir/config_Hi3SEA.json"
-wget "https://github.com/CollapseLauncher/CollapseLauncher-ReleaseRepo/raw/refs/heads/main/metadata/v3/preview/config_Hi3CN.json" -O "$metadataV3_dir/config_Hi3CN.json"
-wget "https://github.com/CollapseLauncher/CollapseLauncher-ReleaseRepo/raw/refs/heads/main/metadata/v3/preview/config_Hi3Global.json" -O "$metadataV3_dir/config_Hi3Global.json"
-wget "https://github.com/CollapseLauncher/CollapseLauncher-ReleaseRepo/raw/refs/heads/main/metadata/v3/preview/config_Hi3JP.json" -O "$metadataV3_dir/config_Hi3JP.json"
-wget "https://github.com/CollapseLauncher/CollapseLauncher-ReleaseRepo/raw/refs/heads/main/metadata/v3/preview/config_Hi3KR.json" -O "$metadataV3_dir/config_Hi3KR.json"
-wget "https://github.com/CollapseLauncher/CollapseLauncher-ReleaseRepo/raw/refs/heads/main/metadata/v3/preview/config_Hi3TW.json" -O "$metadataV3_dir/config_Hi3TW.json"
-wget "https://github.com/CollapseLauncher/CollapseLauncher-ReleaseRepo/raw/refs/heads/main/metadata/v3/preview/stamp.json" -O "$metadataV3_dir/stamp.json"
+# Download metadata files
+echo "Fetching the latest metadata files..."
+for file in config_master.json config_Hi3SEA.json config_Hi3CN.json config_Hi3Global.json config_Hi3JP.json config_Hi3KR.json config_Hi3TW.json stamp.json; do
+  wget "https://github.com/CollapseLauncher/CollapseLauncher-ReleaseRepo/raw/refs/heads/main/metadata/v3/preview/$file" -O "$metadataV3_dir/$file"
+done
 
-# do command
-echo
-echo Updating SEA...
-region=Hi3SEA
-$program "$region" "$pustaka_dir" "$json"
-retval=$?
-if [ $retval -eq 0 ]; then
-  echo No changes on $region, skipping...
-elif [ $retval -eq 1 ]; then
-  echo Changes detected for $region!
-  git add .
-  git commit -m "Update pustaka for $region @$timestamp"
-  git push origin-ssh
-elif [ $retval -eq -2147483648 ]; then
-  echo "Error occured for $region, skipping..."
-fi
-echo
+# Function to update a region
+update_region() {
+  region="$1"
+  args="$2"
 
-echo Updating Global...
-region=Hi3Global
-$program "$region" "$pustaka_dir" "$json"
-retval=$?
-if [ $retval -eq 0 ]; then
-  echo No changes on $region, skipping...
-elif [ $retval -eq 1 ]; then
-  echo Changes detected for $region!
-  git add .
-  git commit -m "Update pustaka for $region @$timestamp"
-  git push origin-ssh
-elif [ $retval -eq -2147483648 ]; then
-  echo "Error occured for $region, skipping..."
-fi
-echo
+  echo "Updating $region..."
+  echo "Running command: $program "$region" "$pustaka_dir" "$json" $args"
+  $program "$region" "$pustaka_dir" "$json" $args
+  retval=$?
+  case $retval in
+    0)  echo "No changes on $region, skipping...";;
+    1)  
+      echo "Changes detected for $region!"
+      git add .
+      git commit -m "Update pustaka for $region @$timestamp"
+      git push origin-ssh
+      ;;
+    -2147483648) echo "Error occurred for $region, skipping...";;
+    *) echo "Unexpected return value $retval for $region";;
+  esac
+  echo
+}
 
-echo Updating CN...
-region=Hi3CN
-$program "$region" "$pustaka_dir" "$json" 7.9.1 "" 7.9.0
-retval=$?
-if [ $retval -eq 0 ]; then
-  echo No changes on $region, skipping...
-elif [ $retval -eq 1 ]; then
-  echo Changes detected for $region!
-  git add .
-  git commit -m "Update pustaka for $region @$timestamp"
-  git push origin-ssh
-elif [ $retval -eq -2147483648 ]; then
-  echo "Error occured for $region, skipping..."
-fi
-echo
+# Update all regions
+update_region "Hi3SEA" ""
+update_region "Hi3Global" ""
+update_region "Hi3CN" "7.9.1 \"\" 7.9.0"
+update_region "Hi3TW" ""
+update_region "Hi3KR" ""
+update_region "Hi3JP" ""
 
-echo Updating TW...
-region=Hi3TW
-$program "$region" "$pustaka_dir" "$json"
-retval=$?
-if [ $retval -eq 0 ]; then
-  echo No changes on $region, skipping...
-elif [ $retval -eq 1 ]; then
-  echo Changes detected for $region!
-  git add .
-  git commit -m "Update pustaka for $region @$timestamp"
-  git push origin-ssh
-elif [ $retval -eq -2147483648 ]; then
-  echo "Error occured for $region, skipping..."
-fi
-echo
-
-echo Updating KR...
-region=Hi3KR
-$program "$region" "$pustaka_dir" "$json"
-retval=$?
-if [ $retval -eq 0 ]; then
-  echo No changes on $region, skipping...
-elif [ $retval -eq 1 ]; then
-  echo Changes detected for $region!
-  git add .
-  git commit -m "Update pustaka for $region @$timestamp"
-  git push origin-ssh
-elif [ $retval -eq -2147483648 ]; then
-  echo "Error occured for $region, skipping..."
-fi
-echo
-
-echo Updating JP...
-region=Hi3JP
-$program "$region" "$pustaka_dir" "$json"
-retval=$?
-if [ $retval -eq 0 ]; then
-  echo No changes on $region, skipping...
-elif [ $retval -eq 1 ]; then
-  echo Changes detected for $region!
-  git add .
-  git commit -m "Update pustaka for $region @$timestamp"
-  git push origin-ssh
-elif [ $retval -eq -2147483648 ]; then
-  echo "Error occured for $region, skipping..."
-fi
-echo
-
+# Script completion
 end_timestamp=$(date +%s)
-elapsed=$(( $end_timestamp - $timestamp ))
-echo Time spent: $elapsed seconds
+elapsed=$((end_timestamp - timestamp))
+echo "Time spent: $elapsed seconds"
