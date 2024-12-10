@@ -53,11 +53,10 @@ done
 # Function to update a region
 update_region() {
   region="$1"
-  args="$2"
 
   echo "Updating $region..."
-  echo "Running command: $program "$region" "$pustaka_dir" "$json" $args"
-  $program "$region" "$pustaka_dir" "$json" $args
+  echo "Running command: $program "$region" "$pustaka_dir" "$json" $2 $3 $4"
+  $program "$region" "$pustaka_dir" "$json" $2 $3 $4
   retval=$?
   case $retval in
     0)  echo "No changes on $region, skipping...";;
@@ -74,12 +73,12 @@ update_region() {
 }
 
 # Update all regions
-update_region "Hi3SEA" ""
-update_region "Hi3Global" ""
-update_region "Hi3CN" "7.9.1 \"\" 7.9.0"
-update_region "Hi3TW" ""
-update_region "Hi3KR" ""
-update_region "Hi3JP" ""
+update_region "Hi3SEA" "" "" ""
+update_region "Hi3Global" "" "" ""
+update_region "Hi3CN" "7.9.1" "\"\"" "7.9.0"
+update_region "Hi3TW" "" "" ""
+update_region "Hi3KR" "" "" ""
+update_region "Hi3JP" "" "" ""
 
 # Script completion
 end_timestamp=$(date +%s)
