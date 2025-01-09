@@ -1,7 +1,5 @@
-﻿name: Upload to R2
+﻿name: Upload to R2 (Force all)
 on:
-  push:
-    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
