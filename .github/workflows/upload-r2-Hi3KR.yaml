@@ -1,33 +1,30 @@
-﻿name: Upload to R2
+name: Upload to R2 - Hi3KR
 on:
   push:
     branches: [ "main" ]
+    paths:
+        - 'pustaka/Hi3KR/**'
   workflow_dispatch:
 
 jobs:
-  Fetch:
+  pustaka-Hi3KR:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         run: |
           git clone --depth 1 https://github.com/CollapseLauncher/CollapseLauncher-MetaRepo.git cl-meta
-      - name: Clean unused objects
-        run: |
-          rm -rf ./cl-meta/.git
-          rm -rf ./cl-meta/.github
-          rm -rf ./cl-meta/.gitignore
-          rm -rf ./cl-meta/scripts
-      - name: Sync Metadata root objects
+
+      - name: Sync Metadata objects
         uses: ryand56/r2-upload-action@latest
         with:
           r2-account-id: ${{ secrets.R2_ACCOUNT_ID }}
           r2-access-key-id: ${{ secrets.R2_ACCESS_KEY_ID }}
           r2-secret-access-key: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           r2-bucket: ${{ secrets.R2_BUCKET }}
-          source-dir: cl-meta
-          destination-dir: cl-meta
+          source-dir: cl-meta/pustaka/Hi3KR
+          destination-dir: cl-meta/pustaka/Hi3KR
           output-file-url: false
-
+        
       - name: Purge Cloudflare cache
         run: |
           curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_PURGE_CACHE_ZONEID }}/purge_cache" \
