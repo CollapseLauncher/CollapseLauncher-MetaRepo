@@ -80,6 +80,10 @@ update_region "Hi3TW" "" "" ""
 update_region "Hi3KR" "" "" ""
 update_region "Hi3JP" "" "" ""
 
+# Force git stash then push in the end just to make sure everything is clean
+git stash
+git push origin-ssh
+
 # Script completion
 end_timestamp=$(date +%s)
 elapsed=$((end_timestamp - timestamp))
