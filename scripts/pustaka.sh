@@ -75,7 +75,8 @@ update_region() {
 # Update all regions
 update_region "Hi3SEA" "" "" ""
 update_region "Hi3Global" "" "" ""
-update_region "Hi3CN" "" "" ""
+# Disable CN region update due to 8.2 incompatibility
+# update_region "Hi3CN" "" "" ""
 update_region "Hi3TW" "" "" ""
 update_region "Hi3KR" "" "" ""
 update_region "Hi3JP" "" "" ""
