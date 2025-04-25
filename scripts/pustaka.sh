@@ -11,6 +11,8 @@ json="$metadataV3_dir"
 pustaka_dir="$repo_dir/pustaka"
 metadata_url="https://github.com/CollapseLauncher/CollapseLauncher-ReleaseRepo/raw/main/metadata/metadatav2_previewconfig.json"
 
+cache_dir="/mnt/disk3/collapseFiles/tmp_asb"
+
 timestamp=$(date +%s)
 echo "Starting at $timestamp"
 echo
@@ -53,7 +55,7 @@ done
 # Function to update a region
 update_region() {
   region="$1"
-  export XMFKILLA_REF_ASB_PATH=$(readlink -f "$program_dir/../tmp_asb/$region")
+  export XMFKILLA_REF_ASB_PATH=$(readlink -f "$cache_dir/$region")
 
   echo "Updating $region..."
   echo "Ensure temp directory..."
