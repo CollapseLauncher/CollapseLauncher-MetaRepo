@@ -54,6 +54,9 @@ done
 update_region() {
   region="$1"
 
+  XMFKILLA_REF_ASB_PATH=$(readlink -f "$program_dir/../tmp_asb/$region")
+  echo XMFKILLA_REF_ASB_PATH is set to $XMFKILLA_REF_ASB_PATH
+
   echo "Updating $region..."
   echo "Running command: $program "$region" "$pustaka_dir" "$json" $2 $3 $4"
   $program "$region" "$pustaka_dir" "$json" $2 $3 $4
@@ -75,8 +78,7 @@ update_region() {
 # Update all regions
 update_region "Hi3SEA" "" "" ""
 update_region "Hi3Global" "" "" ""
-# Disable CN region update due to 8.2 incompatibility
-# update_region "Hi3CN" "" "" ""
+update_region "Hi3CN" "" "" ""
 update_region "Hi3TW" "" "" ""
 update_region "Hi3KR" "" "" ""
 update_region "Hi3JP" "" "" ""
