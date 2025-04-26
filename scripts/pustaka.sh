@@ -66,7 +66,7 @@ update_region() {
   $program "$region" "$pustaka_dir" "$json" $2 $3 $4
 
   # Check if there are any staged or unstaged changes
-  if [[ -n $(git status --porcelain) ]]; then
+  if [ "$(git status --porcelain)" != "" ]; then
     echo "Changes detected for $region!"
     git add .
     git commit -m "Update pustaka for $region @$timestamp"
@@ -77,7 +77,6 @@ update_region() {
 
   echo
 }
-
 
 # Update all regions
 update_region "Hi3SEA" "" "" ""
