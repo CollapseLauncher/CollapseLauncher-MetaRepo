@@ -60,23 +60,24 @@ update_region() {
   echo "Updating $region..."
   echo "Ensure temp directory..."
   echo "XMFKILLA_REF_ASB_PATH is set to $XMFKILLA_REF_ASB_PATH"
-  mkdir -p $XMFKILLA_REF_ASB_PATH
-  echo "Running command: $program "$region" "$pustaka_dir" "$json" $2 $3 $4"
+  mkdir -p "$XMFKILLA_REF_ASB_PATH"
+
+  echo "Running command: $program \"$region\" \"$pustaka_dir\" \"$json\" $2 $3 $4"
   $program "$region" "$pustaka_dir" "$json" $2 $3 $4
-  retval=$?
-  case $retval in
-    0)  echo "No changes on $region, skipping...";;
-    1)  
-      echo "Changes detected for $region!"
-      git add .
-      git commit -m "Update pustaka for $region @$timestamp"
-      git push origin-ssh
-      ;;
-    -2147483648) echo "Error occurred for $region, skipping...";;
-    *) echo "Unexpected return value $retval for $region";;
-  esac
+
+  # Check if there are any staged or unstaged changes
+  if [[ -n $(git status --porcelain) ]]; then
+    echo "Changes detected for $region!"
+    git add .
+    git commit -m "Update pustaka for $region @$timestamp"
+    git push origin-ssh
+  else
+    echo "No changes on $region, skipping..."
+  fi
+
   echo
 }
+
 
 # Update all regions
 update_region "Hi3SEA" "" "" ""
