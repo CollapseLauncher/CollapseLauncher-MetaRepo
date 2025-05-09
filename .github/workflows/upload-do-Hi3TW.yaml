@@ -1,0 +1,31 @@
+name: Upload to DigitalOcean - Hi3TW
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+        - 'pustaka/Hi3TW/**'
+  workflow_dispatch:
+
+env:
+  DESTINATION-PATH: 'cl-meta/pustaka/Hi3CN'
+  CDN-URL: 'https://cdn.collapselauncher.com'
+
+jobs:
+  pustaka-Hi3TW:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        run: |
+          git clone --depth 1 https://github.com/CollapseLauncher/CollapseLauncher-MetaRepo.git cl-meta
+          
+      - name: Upload
+        uses: BetaHuhn/do-spaces-action@v2
+        with:
+          access_key: ${{ secrets.DO_SPACES_KEY}}
+          secret_key: ${{ secrets.DO_SPACES_SECRET }}
+          space_name: ${{ secrets.DO_SPACES_NAME }}
+          space_region: ${{ secrets.DO_SPACES_REGION }}
+          source: '${{ env.DESTINATION-PATH }}'
+          out_dir: '${{ env.DESTINATION-PATH }}'
+          cdn_domain: ${{ env.CDN-URL }}
+          versioning: false

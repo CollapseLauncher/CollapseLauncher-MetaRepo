@@ -1,0 +1,35 @@
+﻿name: Upload to DigitalOcean (Force all)
+on:
+  workflow_dispatch:
+
+env:
+  DESTINATION-PATH: 'cl-meta'
+  CDN-URL: 'https://cdn.collapselauncher.com'
+
+jobs:
+  Fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        run: |
+          git clone --depth 1 https://github.com/CollapseLauncher/CollapseLauncher-MetaRepo.git cl-meta
+
+      - name: Clean unused objects
+        run: |
+          rm -rf ./cl-meta/.git
+          rm -rf ./cl-meta/.github
+          rm -rf ./cl-meta/.gitignore
+          rm -rf ./cl-meta/scripts
+          rm -rf ./hi
+
+      - name: Upload
+        uses: BetaHuhn/do-spaces-action@v2
+        with:
+          access_key: ${{ secrets.DO_SPACES_KEY}}
+          secret_key: ${{ secrets.DO_SPACES_SECRET }}
+          space_name: ${{ secrets.DO_SPACES_NAME }}
+          space_region: ${{ secrets.DO_SPACES_REGION }}
+          source: cl-meta
+          out_dir: '${{ env.DESTINATION-PATH }}'
+          cdn_domain: ${{ env.CDN-URL }}
+          versioning: false
