@@ -37,7 +37,7 @@ jobs:
 
       - name: Purge DigitalOcean cache
         run: |
-          doctl compute cdn flush a94b5dfc-8dfe-4060-99ec-14526d813c22 --verbose --files ${{ env.DESTINATION-PATH }}/*
+          doctl compute cdn flush a94b5dfc-8dfe-4060-99ec-14526d813c22 --trace --files ${{ env.DESTINATION-PATH }}/*
 
       - name: Purge Cloudflare cache
         run: |
