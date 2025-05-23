@@ -6,7 +6,7 @@ program="$program_dir/senadina-er"
 json_old="$program_dir/metadata.json"
 
 repo_dir="/root/git/CollapseLauncher-MetaRepo"
-metadataV3_dir="/mnt/share/collapseTool/metadatav3"
+metadataV3_dir="/root/collapseTool/metadatav3"
 json="$metadataV3_dir"
 pustaka_dir="$repo_dir/pustaka"
 
