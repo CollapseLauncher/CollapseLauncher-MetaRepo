@@ -55,11 +55,11 @@ done
 # Function to update a region
 update_region() {
   region="$1"
-  export XMFKILLA_REF_ASB_PATH=$(readlink -f "$cache_dir/$region")
+#  export XMFKILLA_REF_ASB_PATH=$(readlink -f "$cache_dir/$region")
 
   echo "Updating $region..."
-  echo "Ensure temp directory..."
-  echo "XMFKILLA_REF_ASB_PATH is set to $XMFKILLA_REF_ASB_PATH"
+#  echo "Ensure temp directory..."
+#  echo "XMFKILLA_REF_ASB_PATH is set to $XMFKILLA_REF_ASB_PATH"
   mkdir -p "$XMFKILLA_REF_ASB_PATH"
 
   echo "Running command: $program \"$region\" \"$pustaka_dir\" \"$json\" $2 $3 $4"
