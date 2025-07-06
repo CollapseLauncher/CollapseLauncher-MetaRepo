@@ -45,7 +45,7 @@ chmod +x "$program"
 # Download metadata files
 echo "Fetching the latest metadata files..."
 for file in config_master.json config_Hi3SEA.json config_Hi3CN.json config_Hi3Global.json config_Hi3JP.json config_Hi3KR.json config_Hi3TW.json stamp.json; do
-  curl "https://github.com/CollapseLauncher/CollapseLauncher-ReleaseRepo/raw/refs/heads/main/metadata/v3/preview/$file" -o "$metadataV3_dir/$file"
+  curl -sL "https://github.com/CollapseLauncher/CollapseLauncher-ReleaseRepo/raw/refs/heads/main/metadata/v3/preview/$file" -o "$metadataV3_dir/$file"
 done
 
 # Function to update a region
