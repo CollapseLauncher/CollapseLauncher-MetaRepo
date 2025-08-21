@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  DESTINATION-PATH: 'cl-meta/pustaka/Hi3CN'
+  DESTINATION-PATH: 'cl-meta/pustaka/Hi3Global'
   CDN-URL: 'https://cdn.collapselauncher.com'
 
 jobs:
